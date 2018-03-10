@@ -1,7 +1,7 @@
 # TCAI
 ## True Creative Artificial Intelligence
 
-This project aims at enabling Artificial Intelligence to be creative. 
+This project aims at enabling Artificial Intelligence to be creative to solve complex problems such as the ones related to agent control.
 
 ## Neural Models
 
