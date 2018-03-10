@@ -27,5 +27,5 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see<https://www.gnu.org/licenses/>.
   
 If you want to ask me any question, you can send an e-mail to 
-Alysson.Ribeiro.Silva@gmail.com entitled as "TRUE CREATIVE AI"
+Alysson.Ribeiro.Silva@gmail.com entitled as "TRUE CREATIVE AI".
 For social media, and other matters, you can locate me through my personal website http://alysson.thegeneralsolution.com/
