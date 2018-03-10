@@ -8,7 +8,7 @@ It is composed by Neural Networks models and Processes created and developed by 
 
 ### Adaptive Resonance Associative Map
 
-The first model, here uploaded, is an improved version of the Adaptive Resonance Associative Map (ARAM), created by Ah We Than, and it incorporates a new composite operation called proximity metric developed by me.
+The first model, here uploaded, is an improved version of the Adaptive Resonance Associative Map (ARAM), created by Ah We Than, and it incorporates a new composite operation called proximity metric that I have been developing for precise categorization.
 
 This neural network is based on the Adaptive Resonance Theory and can be used to control agents in real-time without costing too much processing power of your hardware.
 
