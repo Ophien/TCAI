@@ -13,6 +13,7 @@ The first model, here uploaded, is an improved version of the Adaptive Resonance
 This neural network is based on the Adaptive Resonance Theory and can be used to control agents in real-time without costing too much processing power of your CPU or GPU.
 
 The ARAM original paper: https://pdfs.semanticscholar.org/e9c7/3b4eba6a977da8440da1bd0251a43a58d2be.pdf
+
 Improved ARAM: http://ieeexplore.ieee.org/document/8015141/?reload=true
 
 ## Authors
@@ -41,4 +42,5 @@ along with this program.If not, see<https://www.gnu.org/licenses/>.
 
 If you want to ask me any question, you can send an e-mail to 
 Alysson.Ribeiro.Silva@gmail.com entitled as "TRUE CREATIVE AI".
+
 For social media, and other matters, you can locate me through my personal website http://alysson.thegeneralsolution.com/
