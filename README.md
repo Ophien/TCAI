@@ -14,7 +14,7 @@ This neural network is based on the Adaptive Resonance Theory and can be used to
 
 The ARAM original paper: https://pdfs.semanticscholar.org/e9c7/3b4eba6a977da8440da1bd0251a43a58d2be.pdf
 
-Improved ARAM: http://ieeexplore.ieee.org/document/8015141/?reload=true
+Proximity GPU Adaptive Neural Network: http://ieeexplore.ieee.org/document/8015141/?reload=true
 
 ## Authors
 
