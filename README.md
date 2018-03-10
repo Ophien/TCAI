@@ -1,7 +1,7 @@
 # TCAI
 True Creative Artificial Intelligence
 
-This project aims at enabling Artificial Intelligence to be creative. It is composed by Neural Networks models and Processess developed by me. Some of the proposals are based on Adaptive Neural Networks and others on Deep Learning ones. New models are added every week.
+This project aims at enabling Artificial Intelligence to be creative. It is composed by Neural Networks models and Processes created and developed by me. Some of the proposals are based on Adaptive Neural Networks and others on Deep Learning ones. New models are added every week.
 
 The first model, here uploaded, is an improved version of the Adaptive Resonance Associative Map (ARAM), created by Ah We Than, and it incorporate a new composite operation called proximity metric developed by me.
 
