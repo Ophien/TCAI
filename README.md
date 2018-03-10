@@ -16,6 +16,10 @@ This neural network is based on the Adaptive Resonance Theory and can be used to
 ARAM first paper, by Ah We Than: https://pdfs.semanticscholar.org/e9c7/3b4eba6a977da8440da1bd0251a43a58d2be.pdf
 Proximity metric for neuron cluster categorization, by Silva A. R.: http://ieeexplore.ieee.org/document/8015141/?reload=true
 
+## Authors
+
+* **Alysson Ribeiro da Silva** - *Initial work* - [Ophien](https://github.com/Ophien)
+
 ## License
 
 All files here provided are, copylefted, under the GNU GENERAL PUBLIC LICENSE Version 3 sumarized by the following notice:
