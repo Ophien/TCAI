@@ -10,10 +10,10 @@ It is composed by Neural Networks models and Processes created and developed by 
 
 The first model, here uploaded, is an improved version of the Adaptive Resonance Associative Map (ARAM), created by Ah We Than, and it incorporates a new composite operation called proximity metric that I have been developing for precise categorization.
 
-This neural network is based on the Adaptive Resonance Theory and can be used to control agents in real-time without costing too much processing power of your hardware.
+This neural network is based on the Adaptive Resonance Theory and can be used to control agents in real-time without costing too much processing power of your CPU or GPU.
 
-ARAM first paper, by Ah We Than: https://pdfs.semanticscholar.org/e9c7/3b4eba6a977da8440da1bd0251a43a58d2be.pdf
-Proximity metric for neuron cluster categorization, by Silva A. R.: http://ieeexplore.ieee.org/document/8015141/?reload=true
+The ARAM original paper, by Ah We Than, can be found at https://pdfs.semanticscholar.org/e9c7/3b4eba6a977da8440da1bd0251a43a58d2be.pdf
+The Proximity metric for neuron cluster categorization, by Silva A. R., can be found at http://ieeexplore.ieee.org/document/8015141/?reload=true
 
 ## Authors
 
