@@ -1,6 +1,6 @@
 # True Creative Artificial Intelligence
 
-The True Creative Artificial Intelligence (TCAI) aims at enabling Artificial Intelligence to be creative to solve complex problems such as the ones related to agent control. The project is mostly based on Neural Network models that incorporates aspectes of how creativity is generated in the human brain.
+The True Creative Artificial Intelligence (TCAI) aims at enabling Artificial Intelligence to be creative to solve complex problems such as the ones related to agent control. The project is mostly based on Neural Network models that incorporate aspectes of how creativity is generated in the human brain.
 
 ## Neural Models
 
