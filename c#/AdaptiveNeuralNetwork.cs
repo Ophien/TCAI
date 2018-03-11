@@ -1,4 +1,4 @@
-﻿/* This source code provides an improved implementation of the 
+/* This source code provides an improved implementation of the 
  * Adaptive Resonance Associative Map, proposed by Dr. Ah-Hwee Tan
  * as ART Map extension that displays a faster and more stable 
  * behavior for neuron categorization and prediction.
@@ -28,6 +28,47 @@ using System.Threading.Tasks;
 
 namespace TCAI
 {
+    /// <summary>
+    /// Created by Alysson Ribeiro da Silva, the ComplementCodingType specifies which complement will be used when performing prediction or learning
+    /// </summary>
+    class ComplementCodingType
+    {
+        public const int NONE = 0;
+        public const int MIRRORED = 1;
+        public const int PREDICTION = 2;
+        public const int DIRECT_ACCESS = 3;
+    }
+
+    /// <summary>
+    /// Created by Alysson Ribeiro da Silva, the FieldTypes class is responsible for holding all names to represent filed types
+    /// </summary>
+    class FieldTypes
+    {
+        // Field type variables
+        public const int STATE = 0;
+        public const int ACTION = 1;
+        public const int REWARD = 2;
+    }
+
+    /// <summary>
+    /// Created by Alysson Ribeiro da Silva, the NeuronLearning class is responsible for holding all neuron learning types for the fuzzy neuron clusters
+    /// </summary>
+    class NeuronLearning
+    {
+        public const int ART_I = 1;
+        public const int ART_II = 2;
+    }
+
+    /// <summary>
+    /// Created by Alysson Ribeiro da Silva, the NeuronActivation class is responsible for holding all the activaton types for the fuzzy neuron clusters
+    /// </summary>
+    class NeuronActivation
+    {
+        public const int ART_I = 1;
+        public const int ART_II = 2;
+        public const int PROXIMITY = 3;
+    }
+
     /// <summary>
     ///  Created by Alysson Ribeiro da Silva, the NetDescription class is responsible for holding the structural design of the Adaptive Neural Network.
     /// </summary>
@@ -100,7 +141,18 @@ namespace TCAI
             for (int field = 0; field < totalFields; field++)
                 activity[field] = new double[featuresSizes[field]];
 
+            inputFields = new double[totalFields][];
+            for (int field = 0; field < totalFields; field++)
+                inputFields[field] = new double[featuresSizes[field]];
+
+            predictionFields = new double[totalFields][];
+            for (int field = 0; field < totalFields; field++)
+                predictionFields[field] = new double[featuresSizes[field]];
+
             activitySum = new double[totalFields];
+
+            neuronsConfidence = new List<double>();
+            neurons = new List<double[][]>();
 
             createNeuron();
         }
@@ -167,16 +219,6 @@ namespace TCAI
         {
             for (int field = 0; field < totalFields; field++)
                 Array.Copy(stimulus[field], 0, activity[field], 0, featuresSizes[field]);
-        }
-        //----------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// Reads the current activity
-        /// </summary>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        public double[] readAcitivity(int field)
-        {
-            return (double[])activity[field].Clone();
         }
         //----------------------------------------------------------------------------------------------------        
         /// <summary>
@@ -299,13 +341,13 @@ namespace TCAI
                     int op = temperatureOp[field];
                     switch (op)
                     {
-                        case 1:
+                        case NeuronActivation.ART_I:
                             t += ARTI(field, neuron[field], neuron_wAndxSum);
                             break;
-                        case 2:
+                        case NeuronActivation.ART_II:
                             t += ARTII(field, neuron[field], neuron_wAndxSum);
                             break;
-                        case 3:
+                        case NeuronActivation.PROXIMITY:
                             t += proximity(field, neuron[field], neuron_wAndxSum);
                             break;
                     }
@@ -386,11 +428,11 @@ namespace TCAI
         private void learnComposite(int selectedNeuron)
         {
             if (neurons[selectedNeuron][totalFields - 1][0] == 1.0
-                    && neurons[selectedNeuron][totalFields - 1][1] == 0.0 && fieldsClass[totalFields - 1] == REWARD)
+                    && neurons[selectedNeuron][totalFields - 1][1] == 0.0 && fieldsClass[totalFields - 1] == FieldTypes.REWARD)
                 return;
 
             if (neurons[selectedNeuron][totalFields - 1][0] == 0.0
-                    && neurons[selectedNeuron][totalFields - 1][1] == 1.0 && fieldsClass[totalFields - 1] == REWARD)
+                    && neurons[selectedNeuron][totalFields - 1][1] == 1.0 && fieldsClass[totalFields - 1] == FieldTypes.REWARD)
                 return;
 
             for (int field = 0; field < totalFields; field++)
@@ -398,10 +440,10 @@ namespace TCAI
                 int op = learningOp[field];
                 switch (op)
                 {
-                    case 1:
+                    case NeuronLearning.ART_I:
                         stampNeuronARTI(field, selectedNeuron);
                         break;
-                    case 2:
+                    case NeuronLearning.ART_II:
                         stampNeuronARTII(field, selectedNeuron);
                         break;
                 }
@@ -416,7 +458,7 @@ namespace TCAI
             double[][] learningNeuron = neurons[lastSelectedNeuron];
             for (int field = 0; field < totalFields; field++)
             {
-                if (fieldsClass[field] == ACTION)
+                if (fieldsClass[field] == FieldTypes.ACTION)
                 {
                     for (int element = 0; element < featuresSizes[field]; element++)
                     {
@@ -600,7 +642,7 @@ namespace TCAI
             int actionField = 0;
             for (int i = 0; i < totalFields; i++)
             {
-                if (fieldsClass[i] == ACTION)
+                if (fieldsClass[i] == FieldTypes.ACTION)
                 {
                     actionField = i;
                     break;
@@ -659,6 +701,22 @@ namespace TCAI
         /// <param name="learning"></param>
         public void prediction(bool learning)
         {
+            // DEBUG PRINTING
+            if (debug)
+            {
+                if (learning)
+                    Console.WriteLine("------------ PERFORMING A LEARNING OPERATION ------------------");
+                else
+                    Console.WriteLine("------------ PERFORMING A PREDICTION OPERATION ----------------");
+
+                Console.WriteLine("Received stimulus: ");
+                printNeuron(inputFields);
+            }
+
+            // create operational copy of the input stimulus fields
+            for (int field = 0; field < totalFields; field++)
+                Array.Copy(inputFields[field], activity[field], activity[field].Length);
+
             calculateActivitySum();
 
             double[] vigilances = calculateVigilances(learning);
@@ -670,7 +728,7 @@ namespace TCAI
             List<NeuronTemperatureTuple> neuronsTemperature = new List<NeuronTemperatureTuple>();
             for (int currentNeuron = 0; currentNeuron < neurons.Count - 1; currentNeuron++)
             {
-                double t = calculateTComposite(neurons.[currentNeuron], wAndxSum[currentNeuron]);
+                double t = calculateTComposite(neurons[currentNeuron], wAndxSum[currentNeuron]);
                 neuronsTemperature.Add(new NeuronTemperatureTuple(currentNeuron, t));
             }
             calculateTComposite(neurons[neurons.Count - 1], wAndxSum[neurons.Count - 1]);
@@ -679,7 +737,7 @@ namespace TCAI
             neuronsTemperature.Sort((first, second) =>
             {
                 if (first != null && second != null)
-                    return first.t.CompareTo(second.t);
+                    return second.t.CompareTo(first.t);
 
                 if (first == null && second == null)
                     return 0;
@@ -710,7 +768,7 @@ namespace TCAI
                     bool perfectError = true;
                     for (int field = 0; field < totalFields; field++)
                     {
-                        if (!checkPerfectMissmatch(field, neuron) && fieldsClass[field] == STATE)
+                        if (!checkPerfectMissmatch(field, neuron) && fieldsClass[field] == FieldTypes.STATE)
                         {
                             perfectError = false;
                             break;
@@ -759,6 +817,18 @@ namespace TCAI
             }
 
             lastSelectedNeuron = selectedNeuron;
+
+            // DEBUG PRINTING
+            if (debug)
+            {
+                Console.WriteLine("Activity for neuron " + selectedNeuron + ":");
+                printNeuron(selectedNeuron);
+
+                Console.WriteLine("Readout for neuron " + selectedNeuron + ":");
+                printNeuron(activity);
+
+                Console.WriteLine();
+            }
         }
         //----------------------------------------------------------------------------------------------------
         /// <summary>
@@ -770,11 +840,296 @@ namespace TCAI
             return neurons[lastSelectedNeuron];
         }
         //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Returns the last obtained prediction index
+        /// </summary>
+        /// <returns></returns>
+        public int getLastActivatedCluster()
+        {
+            return lastSelectedNeuron;
+        }
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Set the activity individually
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="externalStimulus"></param>
+        public void setInputField(int field, double[] externalStimulus)
+        {
+            if (externalStimulus == null)
+            {
+                Console.WriteLine("The external stimulus can not be null.");
+                return;
+            }
 
-        // Field type variables
-        private static int STATE = 0;
-        private static int ACTION = 1;
-        private static int REWARD = 2;
+            if (field > activity.Length - 1)
+            {
+                Console.WriteLine("The requested field does not exist.");
+                return;
+            }
+
+            double[] operational = new double[externalStimulus.Length];
+            Array.Copy(externalStimulus, operational, externalStimulus.Length);
+
+            int actvityLength = inputFields[field].Length;
+            int stimulusLength = operational.Length;
+
+            if (actvityLength > stimulusLength)
+            {
+                Console.WriteLine("The size of the external stimulus is different from the requested field.");
+                return;
+            }
+
+            Array.Copy(operational, inputFields[field], operational.Length);
+        }
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Set the activity individually
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="externalStimulus"></param>
+        public void setInputField(int field, double[] externalStimulus, int complementCodingType)
+        {
+            if (externalStimulus == null)
+            {
+                Console.WriteLine("The external stimulus can not be null.");
+                return;
+            }
+
+            if (field > activity.Length - 1)
+            {
+                Console.WriteLine("The requested field does not exist.");
+                return;
+            }
+
+            double[] operational = new double[externalStimulus.Length];
+            Array.Copy(externalStimulus, operational, externalStimulus.Length);
+
+            switch (complementCodingType)
+            {
+                case ComplementCodingType.NONE:
+                    break;
+                case ComplementCodingType.MIRRORED:
+                    operational = turnComplemented(operational, false);
+                    break;
+                case ComplementCodingType.PREDICTION:
+                    operational = turnComplemented(operational, true);
+                    break;
+                case ComplementCodingType.DIRECT_ACCESS:
+                    operational = generateDirectAccess(operational);
+                    break;
+            }
+                
+            int actvityLength = inputFields[field].Length;
+            int stimulusLength = operational.Length;
+
+            if (actvityLength > stimulusLength)
+            {
+                Console.WriteLine("The size of the external stimulus is different from the requested field.");
+                return;
+            }
+
+            Array.Copy(operational, inputFields[field], operational.Length);
+        }
+        //----------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Return what was predicted for the selected field
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="externalStimulus"></param>
+        public double[] readPrediction(int field)
+        {
+            if (field > activity.Length - 1)
+            {
+                Console.WriteLine("The requested field does not exist.");
+                return null;
+            }
+
+            Array.Copy(activity[field], predictionFields[field], activity[field].Length);
+            return predictionFields[field];
+        }
+        /// <summary>
+        /// Turns the received stimulus into a mirrored complemented code
+        /// </summary>
+        private double[] turnComplemented(double[] stimulus, bool prediction)
+        {
+            int newTotalSize = stimulus.Length * 2;
+            double[] newStimulus = new double[newTotalSize];
+            Array.Copy(stimulus, newStimulus, stimulus.Length);
+            for (int i = stimulus.Length - 1, j = stimulus.Length; i >= 0; i--, j++)
+                if(prediction)
+                    newStimulus[j] = stimulus[i];
+                else
+                    newStimulus[j] = 1.0 - stimulus[i];
+
+            return newStimulus;
+        }
+        /// <summary>
+        /// Turns the received stimulus into a mirrored complemented code
+        /// </summary>
+        private double[] generateDirectAccess(double[] stimulus)
+        {
+            int newTotalSize = stimulus.Length * 2;
+            double[] newStimulus = new double[newTotalSize];
+            for (int i = 0; i < newTotalSize; i++)
+                newStimulus[i] = 1.0;
+            return newStimulus;
+        }
+        //----------------------------------------------------------------------------------------------------
+        public void printNetStructure()
+        {
+            Console.WriteLine("------------ NETWORK'S STRUCTURE ------------------------------");
+            Console.WriteLine("Total number of fields: " + totalFields);
+
+            Console.WriteLine("Field sizes: ");
+            for (int i = 0; i < totalFields; i++)
+                Console.WriteLine("\t" + featuresSizes[i]);
+
+            Console.WriteLine("Neuron cluster temperature operations: ");
+            for (int i = 0; i < totalFields; i++)
+            {
+                switch (temperatureOp[i])
+                {
+                    case NeuronActivation.ART_I:
+                        Console.WriteLine("\tfuzzyARTI");
+                        break;
+                    case NeuronActivation.ART_II:
+                        Console.WriteLine("\tfuzzyARTII");
+                        break;
+                    case NeuronActivation.PROXIMITY:
+                        Console.WriteLine("\tProximity");
+                        break;
+                }
+            }
+
+            Console.WriteLine("Used operations for learning: ");
+            for (int i = 0; i < totalFields; i++)
+            {
+                switch (learningOp[i])
+                {
+                    case NeuronLearning.ART_I:
+                        Console.WriteLine("\tfuzzyARTI");
+                        break;
+                    case NeuronLearning.ART_II:
+                        Console.WriteLine("\tfuzzyARTII");
+                        break;
+                }
+            }
+
+            Console.WriteLine("Field types: ");
+            for (int i = 0; i < totalFields; i++)
+            {
+                switch (fieldsClass[i])
+                {
+                    case FieldTypes.STATE:
+                        Console.WriteLine("\tSTATE");
+                        break;
+                    case FieldTypes.ACTION:
+                        Console.WriteLine("\tACTION");
+                        break;
+                    case FieldTypes.REWARD:
+                        Console.WriteLine("\tREWARD");
+                        break;
+                }
+            }
+            Console.WriteLine("---------------------------------------------------------------");
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+        //----------------------------------------------------------------------------------------------------
+        public void printNetworkParameters()
+        {
+            Console.WriteLine("------------ NETWORK'S PARAMETERS -----------------------------");
+            Console.WriteLine("Learning rates: ");
+            for (int i = 0; i < totalFields; i++)
+                Console.WriteLine("\t" + learningRate[i]);
+
+            Console.WriteLine("Learning vigilances: ");
+            for (int i = 0; i < totalFields; i++)
+                Console.WriteLine("\t" + learnVigilances[i]);
+
+            Console.WriteLine("Performing vigilances: ");
+            for (int i = 0; i < totalFields; i++)
+                Console.WriteLine("\t" + performVigilances[i]);
+
+            Console.WriteLine("Field gammas: ");
+            for (int i = 0; i < totalFields; i++)
+                Console.WriteLine("\t" + gammas[i]);
+
+            Console.WriteLine("Field alphas: ");
+            for (int i = 0; i < totalFields; i++)
+                Console.WriteLine("\t" + alphas[i]);
+
+            Console.WriteLine("Active fields: ");
+            for (int i = 0; i < totalFields; i++)
+                if (activeFields[i])
+                    Console.WriteLine("\tTrue");
+                else
+                    Console.WriteLine("\tFalse");
+
+            Console.WriteLine("Active adaptive vigilances: ");
+            for (int i = 0; i < totalFields; i++)
+                if (vigilancesRaising[i])
+                    Console.WriteLine("\tTrue");
+                else
+                    Console.WriteLine("\tFalse");
+
+            Console.WriteLine("Adaptive vigilance rate: " + adaptiveVigilanceRate);
+            if (fuzzyReadout)
+                Console.WriteLine("Fuzzy readout: Enabled");
+            else
+                Console.WriteLine("Fuzzy readout: Disabled");
+            if (learningEnabled)
+                Console.WriteLine("Learning: Enabled");
+            else
+                Console.WriteLine("learning: Disabled");
+
+            Console.WriteLine("---------------------------------------------------------------");
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+        //----------------------------------------------------------------------------------------------------
+        public void printNeuron(int neuronToPrint)
+        {
+            double[][] neuron = neurons[neuronToPrint];
+
+            // Console.WriteLine("Neuron " + neuronToPrint);
+            for(int field = 0; field < totalFields; field++)
+            {
+                Console.Write("\t[");
+                for(int i = 0; i < featuresSizes[field]; i++)
+                {
+                    if (i < featuresSizes[field] - 1)
+                        Console.Write(neuron[field][i] + " | ");
+                    else
+                        Console.Write(neuron[field][i]);
+                }
+                Console.WriteLine("]");
+            }
+        }
+        //----------------------------------------------------------------------------------------------------
+        public void printNeuron(double[][] neuron)
+        {
+            // Console.WriteLine("Neuron " + neuronToPrint);
+            for (int field = 0; field < totalFields; field++)
+            {
+                Console.Write("\t[");
+                for (int i = 0; i < featuresSizes[field]; i++)
+                {
+                    if (i < featuresSizes[field] - 1)
+                        Console.Write(neuron[field][i] + " | ");
+                    else
+                        Console.Write(neuron[field][i]);
+                }
+                Console.WriteLine("]");
+            }
+        }
+        //----------------------------------------------------------------------------------------------------
+        public void setDebug(bool value)
+        {
+            this.debug = value;
+        }
+        //----------------------------------------------------------------------------------------------------
 
         // Structure variables
         private int totalFields;
@@ -810,11 +1165,15 @@ namespace TCAI
         private int lastSelectedNeuron = 0;
 
         // Operation variables
+        private double[][] predictionFields;
+        private double[][] inputFields;
         private double[][] activity;
         private double[] activitySum;
 
         private List<double> neuronsConfidence;
         private List<double[][]> neurons;
+
+        private bool debug;
 
     }
 }
