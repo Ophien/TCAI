@@ -29,7 +29,7 @@ namespace TCAI
 {
     class TestBed
     {
-        public void printLisence()
+        public void printLicense()
         {
             Console.WriteLine("This source code provides examples on how to use the improved");
             Console.WriteLine("Adaptive Resonance Associative Map.");
