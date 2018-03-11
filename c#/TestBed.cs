@@ -308,7 +308,7 @@ namespace TCAI
             network.prediction(learn);
 
             // ---------------------------------------------------------------------
-            // --- Reading a prediction for the field 0 ----------------------------
+            // --- Reading a prediction for the field 1 ----------------------------
             // ---------------------------------------------------------------------
 
             // The field in which the read operation will be performed for the ACTION field 1
