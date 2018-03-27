@@ -4,7 +4,7 @@ The True Creative Artificial Intelligence (TCAI) aims at enabling Artificial Int
 
 ## Neural Models
 
-It is composed by Neural Networks models and Processes created and developed by me. Some of the proposals are based on Adaptive Neural Networks and others on Deep Learning ones. New models are added every week.
+It is composed by Neural Networks models and Processes created and developed by me. Some of the proposals are based on Adaptive Neural Networks and others on Deep Learning ones.
 
 ### Adaptive Resonance Associative Map
 
