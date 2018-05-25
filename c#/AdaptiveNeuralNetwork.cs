@@ -29,7 +29,7 @@ using System.Threading.Tasks;
 namespace TCAI
 {
     /// <summary>
-    /// Created by Alysson Ribeiro da Silva, the ComplementCodingType specifies which complement will be used when performing prediction or learning
+    /// The ComplementCodingType specifies which complement will be used when performing prediction or learning
     /// </summary>
     class ComplementCodingType
     {
@@ -40,7 +40,7 @@ namespace TCAI
     }
 
     /// <summary>
-    /// Created by Alysson Ribeiro da Silva, the FieldTypes class is responsible for holding all names to represent filed types
+    /// The FieldTypes class is responsible for holding all names to represent filed types
     /// </summary>
     class FieldTypes
     {
@@ -51,7 +51,7 @@ namespace TCAI
     }
 
     /// <summary>
-    /// Created by Alysson Ribeiro da Silva, the NeuronLearning class is responsible for holding all neuron learning types for the fuzzy neuron clusters
+    /// The NeuronLearning class is responsible for holding all neuron learning types for the fuzzy neuron clusters
     /// </summary>
     class NeuronLearning
     {
@@ -70,7 +70,7 @@ namespace TCAI
     }
 
     /// <summary>
-    ///  Created by Alysson Ribeiro da Silva, the NetDescription class is responsible for holding the structural design of the Adaptive Neural Network.
+    ///  The NetDescription class is responsible for holding the structural design of the Adaptive Neural Network.
     /// </summary>
     class NetDescription
     {
@@ -90,7 +90,7 @@ namespace TCAI
     }
 
     /// <summary>
-    ///  Created by Alysson Ribeiro da Silva, the NeuronTemperatureTuple class is responsible for holding the neuron temperature and its index to facilitate the network's
+    ///  The NeuronTemperatureTuple class is responsible for holding the neuron temperature and its index to facilitate the network's
     ///  internal operations.
     /// </summary>
     class NeuronTemperatureTuple
@@ -108,7 +108,7 @@ namespace TCAI
     }
 
     /// <summary>
-    ///  Created by Alysson Ribeiro da Silva, the AdaptiveNeuralNetwork class is implements the Adaptive Resonance Associative Map with the composite operations.
+    ///  The AdaptiveNeuralNetwork class is implements the Adaptive Resonance Associative Map with the composite operations.
     ///  The deployed model enables to use fuzzy ART I, fuzzy ART II, and a proximity metric for neuron cluster categorization.
     ///  This class helps deploying Q-Learning models and Reactive models, based on action masks, to control agents in real-time.
     ///  Moreover, it also posses a perfect miss-match mechanism, and neuron cluster based operations to facilitate its working and to avoid errors when predicting information.
